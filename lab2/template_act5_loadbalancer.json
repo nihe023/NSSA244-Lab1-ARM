@@ -42,12 +42,12 @@
             "defaultValue": "NSG-WEB",
             "type": "String"
         },
-        "loadBalancer_LBALANCER_name": {
-            "defaultValue": "LBALANCER",
+        "loadBalancer_LB_WEB_name": {
+            "defaultValue": "LB-WEB",
             "type": "String"
         },
-        "publicIPAddresses_LBALANCER_ip_name": {
-            "defaultValue": "LBALANCER-ip",
+        "publicIPAddresses_LB_ip_name": {
+            "defaultValue": "LB-ip",
             "type": "String"
         }
     },
@@ -470,7 +470,7 @@
                 "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_WEB1_ip_name'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VNET_LAB1_name'), 'SUBNET-WEB')]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_NSG_WEB_name'))]",
-                "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancer_LBALANCER_name'))]"
+                "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancer_LB_WEB_name'))]"
             ],
             "kind": "Regular",
             "properties": {
@@ -490,7 +490,7 @@
                             },
                             "loadBalancerBackendAddressPools": [
                                 {
-                                    "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancer_LBALANCER_name'), 'be-lb')]"
+                                    "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancer_LB_WEB_name'), 'be-lb')]"
                                 }
                             ],
                             "subnet": {
@@ -524,7 +524,7 @@
                 "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_WEB2_ip_name'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_VNET_LAB1_name'), 'SUBNET-WEB')]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_NSG_WEB_name'))]",
-                "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancer_LBALANCER_name'))]"
+                "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancer_LB_WEB_name'))]"
             ],
             "kind": "Regular",
             "properties": {
@@ -544,7 +544,7 @@
                             },
                             "loadBalancerBackendAddressPools": [
                                 {
-                                    "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancer_LBALANCER_name'), 'be-lb')]"
+                                    "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancer_LB_WEB_name'), 'be-lb')]"
                                 }
                             ],
                             "subnet": {
@@ -572,7 +572,7 @@
         {
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2024-07-01",
-            "name": "[parameters('publicIPAddresses_LBALANCER_ip_name')]",
+            "name": "[parameters('publicIPAddresses_LB_ip_name')]",
             "location": "eastus2",
             "sku": {
                 "name": "Standard",
@@ -594,19 +594,19 @@
         {
             "type": "Microsoft.Network/loadBalancers",
             "apiVersion": "2025-05-01",
-            "name": "[parameters('loadBalancer_LBALANCER_name')]",
+            "name": "[parameters('loadBalancer_LB_WEB_name')]",
             "location": "eastus2",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_LBALANCER_ip_name'))]"
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_LB_ip_name'))]"
             ],
             "properties": {
                 "frontendIPConfigurations": [
                     {
                         "name": "fe-lb",
-                        "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancer_LBALANCER_name')), '/frontendIPConfigurations/fe-lb')]",
+                        "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancer_LB_WEB_name')), '/frontendIPConfigurations/fe-lb')]",
                         "properties": {
                             "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_LBALANCER_ip_name'))]"
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_LB_ip_name'))]"
                             }
                         }
                     }
@@ -614,7 +614,7 @@
                 "backendAddressPools": [
                     {
                         "name": "be-lb",
-                        "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancer_LBALANCER_name'), 'be-lb')]"
+                        "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancer_LB_WEB_name'), 'be-lb')]"
                     }
                 ],
                 "loadBalancingRules": [
@@ -622,13 +622,13 @@
                         "name": "rule-lb",
                         "properties": {
                             "backendAddressPool": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancer_LBALANCER_name'), 'be-lb')]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancer_LB_WEB_name'), 'be-lb')]"
                             },
                             "frontendIPConfiguration": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancer_LBALANCER_name')), '/frontendIPConfigurations/fe-lb')]"
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancer_LB_WEB_name')), '/frontendIPConfigurations/fe-lb')]"
                             },
                             "probe": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancer_LBALANCER_name')), '/probes/http-lb')]"
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancer_LB_WEB_name')), '/probes/http-lb')]"
                             },
                             "protocol": "Tcp",
                             "backendPort": 80,
@@ -640,7 +640,7 @@
                 "probes": [
                     {
                         "name": "http-lb",
-                        "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancer_LBALANCER_name')), '/probes/http-lb')]",
+                        "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancer_LB_WEB_name')), '/probes/http-lb')]",
                         "properties": {
                             "protocol": "Tcp",
                             "port": 80,
